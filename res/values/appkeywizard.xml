@@ -3,7 +3,7 @@
 
     <!-- The following messaging is used whenever AppKey is not installed on the device -->
     <string name="notInstalled_Title">Upgrade for free! Just get AppKey</string>
-    <string name="notInstalled_Message">AppKey will unlock [very specific description of your premium feature] totally for free! Plus, by having AppKey you’ll get great stuff on other apps as well. Learn more now. It only takes a minute.</string>
+    <string name="notInstalled_Message">AppKey will unlock [PREMIUM FEATURES] totally for free! Plus, by having AppKey you’ll get great stuff on other apps as well. Learn more now. It only takes a minute.</string>
     <string name="notInstalled_PositiveButton">Learn about AppKey</string>
     <string name="notInstalled_UpgradeButton">Upgrade [Your app]</string>
     <string name="notInstalled_NegativeButton">Close</string>
@@ -18,7 +18,7 @@
 
     <!-- The following messaging is used whenever AppKey is installed on the device, but it is not running on the home screen -->
     <string name="notRunning_Title">You are almost there</string>
-    <string name="notRunning_Message">It appears you have already installed AppKey. To get the [premium features], you need to put the AppKey widget on your home screen.  Please go do that now, or touch ""instructions"" for a helpful how-to video.</string>
+    <string name="notRunning_Message">It appears you have already installed AppKey. To get the [PREMIUM FEATURES], you need to put the AppKey widget on your home screen.  Please go do that now, or touch ""instructions"" for a helpful how-to video.</string>
     <string name="notRunning_PositiveButton">Show me instructions</string>
     <string name="notRunning_NegativeButton">Close</string>
     
@@ -28,7 +28,7 @@
     main home screen.
     -->
     <string name="timeout_Title">AppKey needs a poke</string>
-    <string name="timeout_Message">Occasionally, if you don’t give him enough attention, your AppKey buddy can get bored and fall asleep. Go to your home screen and poke the red key to turn it green and wake him up to unlock [premium features].</string>
+    <string name="timeout_Message">Occasionally, if you don’t give him enough attention, your AppKey buddy can get bored and fall asleep. Go to your home screen and poke the red key to turn it green and wake him up to unlock [PREMIUM FEATURES].</string>
     <string name="timeout_PositiveButton">Home screen</string>
     <string name="timeout_NegativeButton">Close</string>
     

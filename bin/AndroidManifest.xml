@@ -8,7 +8,7 @@
         android:targetSdkVersion="16" />
 
     <application
-        android:icon="@drawable/appkey_squarekey_green"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name">
         <activity
             android:name=".MainActivity"
