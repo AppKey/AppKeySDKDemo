@@ -23,7 +23,7 @@ public class MainActivity extends Activity {
     private ImageView mImageViewKeylock;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main); 
 
@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
          * The checker will automatically discard excess calls, so don't worry if it is called 
          * several times per session.
          */
-        AppKeyChecker akChecker = new AppKeyChecker(MainActivity.this, "12345");  //TODO: Replace 12345 with appId from AppKey.com
+        AppKeyChecker akChecker = new AppKeyChecker(MainActivity.this, "7");  //TODO: Replace 7 with appId from AppKey.com
         akChecker.checkAccess(new AppKeyCallback()); 
     }
 

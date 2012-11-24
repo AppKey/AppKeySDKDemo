@@ -19,7 +19,7 @@
     <!-- The following messaging is used whenever AppKey is installed on the device, but it is not running on the home screen -->
     <string name="notRunning_Title">You are almost there</string>
     <string name="notRunning_Message">It appears you have already installed AppKey. To get the [PREMIUM FEATURES], you need to put the AppKey widget on your home screen.  Please go do that now, or touch ""instructions"" for a helpful how-to video.</string>
-    <string name="notRunning_PositiveButton">Show me instructions</string>
+    <string name="notRunning_PositiveButton">Instructions</string>
     <string name="notRunning_NegativeButton">Close</string>
     
     <!-- 

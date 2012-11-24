@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="This activity represents the main screen of your app.  It is on this screen that a typical app would check for AppKey and modify the level of functionality available to the user." />
+        android:text="This example activity demonstrates how to perform the AppKey check via onResume.  Try this example when AppKey is not installed to experience the entire flow.  See comments in the AppKeyCallback nested class for how to enable/disable functionality based on the result of this check (Source code: github.com/jimvitek/AppKeyExample).  AppKey pays you (the developer/publisher) each time you convince a new user to install AppKey.  AppKey also pays a share of the ongoing revenue earned on devices that use your app.  With AppKey on the home screen, you can earn more from users who won't pay, even on days they don't use your app.  Email contact@appkey.com for app-specific suggestions on how AppKey could increase your profitability." />
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
