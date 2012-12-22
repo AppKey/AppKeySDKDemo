@@ -43,10 +43,15 @@ public class MainActivity extends Activity {
          * several times per session.
          */
         AppKeyChecker akChecker = new AppKeyChecker(MainActivity.this, "7");  //TODO: Replace 7 with appId from AppKey.com
-        akChecker.checkAccess(new AppKeyCallback()); 
+        akChecker.checkAccess(new AppKeyCallback(akChecker)); 
     }
 
     class AppKeyCallback implements AppKeyCheckerCallback {
+        private AppKeyChecker mAppKeyChecker;
+        
+        public AppKeyCallback(AppKeyChecker appKeyChecker) {
+            mAppKeyChecker=appKeyChecker;
+        }
 
         @Override
         public void allow() { 
@@ -78,9 +83,14 @@ public class MainActivity extends Activity {
              * are often the users first exposure to AppKey, and the more contextual they are to your app, 
              * the more likely the user will buy an upgrade or install AppKey.
              * 
+             * Note2, the AppKeyChecker reference is passed to enable event logging if the calling
+             * app has android.permission.INTERNET permission.  These events are logged to enable 
+             * metics on user conversion, and help diagnose whether or not the app is offering 
+             * sufficient value to users to become AppKey users.
+             * 
              * Optional: Include a Uri to the premium/paid version of this app if you have one
              */
-            new AppKeyWizard(MainActivity.this,reason,null);
+            new AppKeyWizard(MainActivity.this,reason, mAppKeyChecker, null);
             //new AppKeyWizard(MainActivity.this,reason,Uri.parse("market://details?id=com.appkey.widget"));  //TODO: Put your premium app in the Uri
         }
     }

@@ -1,5 +1,6 @@
 package com.appkey.example;
 
+import com.appkey.sdk.AppKeyChecker;
 import com.appkey.sdk.AppKeyCheckerCallback;
 
 import android.app.Activity;
@@ -27,15 +28,18 @@ import android.util.Log;
  */
 public class AppKeyWizard {
     private Activity mActivity;
+    private AppKeyChecker mAppKeyChecker;
 
     /**
      * Pop up an AlertDialog informing the user about AppKey, and guiding them through the installation process.
      * @param activity An activity
      * @param reason AppKeyCheckerCallback reason code
+     * @param appKeyChecker reference to an instantiated AppKeyChecker object (needed for logging)
      * @param premiumAppUri Uri of a premium version of this app in your favorite appstore.  Use null if there is no premium version.
      */
-    public AppKeyWizard(Activity activity, int reason, Uri premiumAppUri) {
+    public AppKeyWizard(Activity activity, int reason, AppKeyChecker appKeyChecker, Uri premiumAppUri) {
         mActivity=activity;
+        mAppKeyChecker=appKeyChecker;
         switch (reason) {
             case (AppKeyCheckerCallback.REASON_APPKEY_NOT_INSTALLED):
                 Intent intentInstallAppKey = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.appkey.widget"));
@@ -43,7 +47,7 @@ public class AppKeyWizard {
                 if (premiumAppUri!=null) {
                     intentInstallPremiumApp = new Intent(Intent.ACTION_VIEW, premiumAppUri);
                 } 
-                promptUser(
+                promptUser("NOT_INSTALLED",
                         activity.getString(R.string.notInstalled_Title), 
                         activity.getString(R.string.notInstalled_Message), 
                         activity.getString(R.string.notInstalled_PositiveButton), intentInstallAppKey, 
@@ -59,7 +63,7 @@ public class AppKeyWizard {
                 String instructions="http://m.appkey.com/instr_redirect?model="+Build.MODEL+"&release="+Build.VERSION.RELEASE+"&oem="+Build.MANUFACTURER;
                 Intent intentInstructions=new Intent(Intent.ACTION_VIEW,Uri.parse(instructions));
 
-                promptUser(
+                promptUser("NOT_RUNNING",
                         activity.getString(R.string.notRunning_Title), 
                         activity.getString(R.string.notRunning_Message), 
                         activity.getString(R.string.notRunning_PositiveButton), intentInstructions, 
@@ -70,7 +74,7 @@ public class AppKeyWizard {
                 Intent intentHome=new Intent(Intent.ACTION_MAIN);
                 intentHome.addCategory(Intent.CATEGORY_HOME);
                 intentHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                promptUser(
+                promptUser("",
                         activity.getString(R.string.timeout_Title), 
                         activity.getString(R.string.timeout_Message), 
                         activity.getString(R.string.timeout_PositiveButton), intentHome, 
@@ -80,7 +84,7 @@ public class AppKeyWizard {
         }
     }
     
-    private void promptUser(String title, String message, String positiveButton, final Intent positiveIntent, String negativeButton, String upgradeButton, final Intent premiumAppIntent) {
+    private void promptUser(final String reasonString, String title, String message, String positiveButton, final Intent positiveIntent, String negativeButton, String upgradeButton, final Intent premiumAppIntent) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(mActivity);
         dialog.setTitle(title);
         dialog.setIcon(R.drawable.appkey_squarekey_green);
@@ -90,6 +94,7 @@ public class AppKeyWizard {
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     mActivity.startActivity(positiveIntent);
+                    if (reasonString!="") mAppKeyChecker.logEvent(reasonString+" wizard positive");
                 } catch (ActivityNotFoundException anfe) {
                     Log.e("AppKey promptUser","startActivity failed for Intent: "+positiveIntent.toString());
                 }
@@ -107,6 +112,7 @@ public class AppKeyWizard {
                 public void onClick(DialogInterface dialog, int which) {
                     try {
                         mActivity.startActivity(premiumAppIntent);
+                        if (reasonString!="") mAppKeyChecker.logEvent(reasonString+" wizard neutral");
                     } catch (ActivityNotFoundException anfe) {
                         Log.e("AppKey promptUser","startActivity failed for Intent: "+premiumAppIntent.toString());
                     }
@@ -114,6 +120,6 @@ public class AppKeyWizard {
             });
         }
         dialog.show();
+        if (reasonString!="") mAppKeyChecker.logEvent(reasonString+" wizard");
     }
-
 }
