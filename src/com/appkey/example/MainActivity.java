@@ -41,8 +41,15 @@ public class MainActivity extends Activity {
          * AppKey check from .onResume() to ensure it is performed each time the app is used.
          * The checker will automatically discard excess calls, so don't worry if it is called 
          * several times per session.
+         * 
+         * AppKeyChecker parameters:
+         * Context context - A Context
+         * String appId - AppId as assigned by AppKey.com for the calling app
+         * boolean analyticsEnabled - If true, and if the calling app has INTERNET permission, the SDK will
+         *                            send events to AppKey for the purpose of reporting on and optimizing
+         *                            conversion.
          */
-        AppKeyChecker akChecker = new AppKeyChecker(MainActivity.this, "7");  //TODO: Replace 7 with appId from AppKey.com
+        AppKeyChecker akChecker = new AppKeyChecker(MainActivity.this, "7", true);  //TODO: Replace 7 with appId from AppKey.com
         akChecker.checkAccess(new AppKeyCallback(akChecker)); 
     }
 

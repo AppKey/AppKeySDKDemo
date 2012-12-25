@@ -14,6 +14,7 @@
 bin/classes/
 bin/res/
 bin/*.cache
+bin/dexedLibs/
 gen/
 lint.xml
 
