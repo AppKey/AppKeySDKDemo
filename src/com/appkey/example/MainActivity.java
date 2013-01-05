@@ -42,14 +42,15 @@ public class MainActivity extends Activity {
          * The checker will automatically discard excess calls, so don't worry if it is called 
          * several times per session.
          * 
-         * AppKeyChecker parameters:
-         * Context context - A Context
-         * String appId - AppId as assigned by AppKey.com for the calling app
-         * boolean analyticsEnabled - If true, and if the calling app has INTERNET permission, the SDK will
-         *                            send events to AppKey for the purpose of reporting on and optimizing
-         *                            conversion.
+         * @param context a Context
+         * @param appID AppKey.com assigned AppID of the calling application
+         * @param debugLogging if true, detailed logging will be enabled to ease debugging via LogCat
+         * @param userAnalytics if true, and if the calling app has INTERNET permission, the SDK will send user interaction
+         *        events to the AppKey platform for the purpose of reporting on & optimizing conversion.  ANDROID_ID is
+         *        logged through this function so users can be tracked through the entire conversion funnel.  Turn on debugLogging
+         *        if you are curious to see the events as they are sent.
          */
-        AppKeyChecker akChecker = new AppKeyChecker(MainActivity.this, "7", true);  //TODO: Replace 7 with appId from AppKey.com
+        AppKeyChecker akChecker = new AppKeyChecker(MainActivity.this, "7", true, true);  //TODO: Replace 7 with appId from AppKey.com
         akChecker.checkAccess(new AppKeyCallback(akChecker)); 
     }
 
