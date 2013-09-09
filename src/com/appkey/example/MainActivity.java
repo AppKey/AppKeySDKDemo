@@ -4,6 +4,8 @@ import com.appkey.sdk.AppKeyChecker;
 import com.appkey.sdk.AppKeyCheckerCallback;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.app.Activity;
@@ -12,15 +14,18 @@ import android.app.Activity;
  * MainActivity of the AppKey Example project
  * 
  * The purpose of this project is to provide an AppKey integration example.  This simple activity
- * simulates the hub activity of your application.  The check itself is patterned after the Google
+ * simulates the hub activity of your application.  The AppKey check is patterned after the Google
  * License Verification Library (LVL), but less complicated and thus simpler to implement.
  *  
  * @author jimvitek
  */
-public class MainActivity extends Activity {
+public class MainActivity extends Activity { 
 
-    private TextView mTextViewAppKeyCheckResult=null;
+    private TextView mTextViewAppKeyCheckResult;
     private ImageView mImageViewKeylock;
+    private Button mButtonWizard;
+    private int mDontAllowReason=0;
+    private AppKeyChecker mAppKeyChecker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) { 
@@ -29,10 +34,24 @@ public class MainActivity extends Activity {
 
         mImageViewKeylock=(ImageView)findViewById(R.id.imageViewKeylock);
         mTextViewAppKeyCheckResult=(TextView)findViewById(R.id.textViewAppKeyCheckResult);
+        mButtonWizard=(Button)findViewById(R.id.buttonWizard);
+        mButtonWizard.setOnClickListener(ButtonWizardListener);
+
+        /* AppKeyChecker - Check whether or not AppKey is enabled
+         * 
+         * Patterned after Google's LVL - http://developer.android.com/google/play/licensing/adding-licensing.html#impl-lc
+         * 
+	     * @param context a Context
+	     * @param appID AppKey.com assigned AppID of the calling application
+	     * @param analyticsEnabled if true, and if the calling app has INTERNET permission, the SDK will send user interactions
+	     *        events along the installation funnel for the purpose of measuring & optimizing conversion. Events are tracked 
+	     *        via Google Analytics using an anonymous UDID.
+        */
+       mAppKeyChecker = new AppKeyChecker(MainActivity.this, "7", true);  //TODO: Replace 7 with your appId from AppKey.com
     }
     
     @Override
-    protected void onResume() { 
+    protected void onResume() {  
         super.onResume();
         mTextViewAppKeyCheckResult.setText("Check in progress");
         mImageViewKeylock.setImageResource(R.drawable.appkey_squarekey_gray);
@@ -41,25 +60,11 @@ public class MainActivity extends Activity {
          * AppKey check from .onResume() to ensure it is performed each time the app is used.
          * The checker will automatically discard excess calls, so don't worry if it is called 
          * several times per session.
-         * 
-         * @param context a Context
-         * @param appID AppKey.com assigned AppID of the calling application
-         * @param debugLogging if true, detailed logging will be enabled to ease debugging via LogCat
-         * @param userAnalytics if true, and if the calling app has INTERNET permission, the SDK will send user interaction
-         *        events to the AppKey platform for the purpose of reporting on & optimizing conversion.  ANDROID_ID is
-         *        logged through this function so users can be tracked through the entire conversion funnel.  Turn on debugLogging
-         *        if you are curious to see the events as they are sent.
          */
-        AppKeyChecker akChecker = new AppKeyChecker(MainActivity.this, "7", true, true);  //TODO: Replace 7 with appId from AppKey.com
-        akChecker.checkAccess(new AppKeyCallback(akChecker)); 
+        mAppKeyChecker.checkAccess(new AppKeyCallback()); 
     }
 
     class AppKeyCallback implements AppKeyCheckerCallback {
-        private AppKeyChecker mAppKeyChecker;
-        
-        public AppKeyCallback(AppKeyChecker appKeyChecker) {
-            mAppKeyChecker=appKeyChecker;
-        }
 
         @Override
         public void allow() { 
@@ -68,38 +73,33 @@ public class MainActivity extends Activity {
              */
             mTextViewAppKeyCheckResult.setText("App Unlocked");
             mImageViewKeylock.setImageResource(R.drawable.appkey_squarekey_green);
+            mButtonWizard.setEnabled(false);
         }
 
         @Override
         public void dontAllow(int reason) { 
             /*
-            *
             * Insert code to disable premium functionality below
-            * 
             */
             mTextViewAppKeyCheckResult.setText("App Locked");
             mImageViewKeylock.setImageResource(R.drawable.appkey_squarekey_red);
-
-            /*
-             * Prompt the user to purchase a paid upgrade, or install AppKey for premium functionality.
-             * The AppKeyWizard is provided as a simple way to prompt the user with AlertDialog
-             * based on how far they are through the installation process.  Unfortunately, android does
-             * not permit automatic installation of AppWidgets even if the user wants it.  The AppKeyWizard
-             * provides contextual help for users who do not know how to install a widget.
-             * 
-             * Note, remember to customize the strings in appkeywizard.xml to fit your app.  These messages 
-             * are often the users first exposure to AppKey, and the more contextual they are to your app, 
-             * the more likely the user will buy an upgrade or install AppKey.
-             * 
-             * Note2, the AppKeyChecker reference is passed to enable event logging if the calling
-             * app has android.permission.INTERNET permission.  These events are logged to enable 
-             * metics on user conversion, and help diagnose whether or not the app is offering 
-             * sufficient value to users to become AppKey users.
-             * 
-             * Optional: Include a Uri to the premium/paid version of this app if you have one
-             */
-            new AppKeyWizard(MainActivity.this,reason, mAppKeyChecker, null);
-            //new AppKeyWizard(MainActivity.this,reason,Uri.parse("market://details?id=com.appkey.widget"));  //TODO: Put your premium app in the Uri
+            mButtonWizard.setEnabled(true);
+            mDontAllowReason=reason;  //Save the reason for the call to promptUser
         }
     }
+    
+    View.OnClickListener ButtonWizardListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+
+		    /**
+		     * Prompt the user to install AppKey
+		     * 
+		     * @param activity an Activity
+		     * @param reason AppKeyCheckerCallback reason code used to personalize message for current state
+		     * @param benefit Description of what will be unlocked for AppKey users
+		     */
+			mAppKeyChecker.promptUser(MainActivity.this, mDontAllowReason, "[Awesome features]");
+		}
+	};
 }
