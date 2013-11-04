@@ -23,8 +23,8 @@ public class MainActivity extends Activity {
 
     private TextView mTextViewAppKeyCheckResult;
     private ImageView mImageViewKeylock;
-    private Button mButtonWizard;
-    private int mDontAllowReason=0;
+    private Button mButtonPromptUser;
+    private Button mButtonOpenAppKey;
     private AppKeyChecker mAppKeyChecker;
 
     @Override
@@ -32,17 +32,20 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main); 
 
-        mImageViewKeylock=(ImageView)findViewById(R.id.imageViewKeylock);
-        mTextViewAppKeyCheckResult=(TextView)findViewById(R.id.textViewAppKeyCheckResult);
-        mButtonWizard=(Button)findViewById(R.id.buttonWizard);
-        mButtonWizard.setOnClickListener(ButtonWizardListener);
+        mImageViewKeylock = (ImageView)findViewById(R.id.imageViewKeylock);
+        mTextViewAppKeyCheckResult = (TextView)findViewById(R.id.textViewAppKeyCheckResult);
+        mButtonPromptUser = (Button)findViewById(R.id.buttonPromptUser);
+        mButtonPromptUser.setOnClickListener(ButtonPromptUserListener);
+        mButtonOpenAppKey = (Button)findViewById(R.id.buttonOpenAppKey);
+        mButtonOpenAppKey.setOnClickListener(ButtonOpenAppKeyListener);
+
 
         /* AppKeyChecker - Check whether or not AppKey is enabled
          * 
          * Patterned after Google's LVL - http://developer.android.com/google/play/licensing/adding-licensing.html#impl-lc
          * 
 	     * @param context a Context
-	     * @param appID AppKey.com assigned AppID of the calling application
+	     * @param appID AppKey.com assigned AppID for this app
 	     * @param analyticsEnabled if true, and if the calling app has INTERNET permission, the SDK will send user interactions
 	     *        events along the installation funnel for the purpose of measuring & optimizing conversion. Events are tracked 
 	     *        via Google Analytics using an anonymous UDID.
@@ -57,9 +60,8 @@ public class MainActivity extends Activity {
         mImageViewKeylock.setImageResource(R.drawable.appkey_squarekey_gray);
 
         /* 
-         * AppKey check from .onResume() to ensure it is performed each time the app is used.
-         * The checker will automatically discard excess calls, so don't worry if it is called 
-         * several times per session.
+         * AppKey check from .onResume() to ensure it is performed each time the user
+         * opens or switches to the app.
          */
         mAppKeyChecker.checkAccess(new AppKeyCallback()); 
     }
@@ -69,26 +71,25 @@ public class MainActivity extends Activity {
         @Override
         public void allow() { 
             /*
-             * Insert code to enable premium functionality below
+             * Insert code to enable premium functionality for this session below
              */
             mTextViewAppKeyCheckResult.setText("App Unlocked");
             mImageViewKeylock.setImageResource(R.drawable.appkey_squarekey_green);
-            mButtonWizard.setEnabled(false);
+            mButtonPromptUser.setEnabled(false);
         }
 
         @Override
         public void dontAllow(int reason) { 
             /*
-            * Insert code to disable premium functionality below
+            * Insert code to disable premium functionality for this session below
             */
             mTextViewAppKeyCheckResult.setText("App Locked");
             mImageViewKeylock.setImageResource(R.drawable.appkey_squarekey_red);
-            mButtonWizard.setEnabled(true);
-            mDontAllowReason=reason;  //Save the reason for the call to promptUser
+            mButtonPromptUser.setEnabled(true);
         }
     }
     
-    View.OnClickListener ButtonWizardListener = new View.OnClickListener() {
+    View.OnClickListener ButtonPromptUserListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
 
@@ -96,10 +97,20 @@ public class MainActivity extends Activity {
 		     * Prompt the user to install AppKey
 		     * 
 		     * @param activity an Activity
-		     * @param reason AppKeyCheckerCallback reason code used to personalize message for current state
 		     * @param benefit Description of what will be unlocked for AppKey users
 		     */
-			mAppKeyChecker.promptUser(MainActivity.this, mDontAllowReason, "[Awesome features]");
+			mAppKeyChecker.promptUser(MainActivity.this, "[Awesome features]");
+		}
+	};
+
+    View.OnClickListener ButtonOpenAppKeyListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+
+		    /**
+		     * Open the AppKey app so user can see cross promotions and local deals (depending on geography)
+		     */
+			mAppKeyChecker.openAppKey();
 		}
 	};
 }

@@ -32,10 +32,17 @@
 	</LinearLayout>
 
     <Button
-        android:id="@+id/buttonWizard"
+        android:id="@+id/buttonPromptUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Call promptUser" />
 
+    <Button
+        android:id="@+id/buttonOpenAppKey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Call openAppKey" />
+    
 </LinearLayout>
