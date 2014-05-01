@@ -1,7 +1,8 @@
 AppKeySDKDemo
 =============
 
-Very simple AppKey integration example. 
+Very simple AppKey integration example. This app detects the state of AppKey
+onResume() and updates the key to green if AppKey is enabled, red if not.
 
 We recommend that you start the demo when AppKey is not installed on your 
 test device, and follow the installation steps as suggested by promptUser.
