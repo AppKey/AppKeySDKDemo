@@ -1,6 +1,4 @@
 <resources>
-
-    <string name="app_name">AppKeyExample</string>
-    <string name="title_activity_main">AppKey Example</string>
-
+    <string name="app_name">AppKey SDK Demo</string>
+    <string name="title_activity_main">AppKey SDK Demo</string>
 </resources>
