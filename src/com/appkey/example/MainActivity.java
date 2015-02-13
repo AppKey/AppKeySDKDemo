@@ -40,13 +40,15 @@ public class MainActivity extends Activity {
          * 
          * Patterned after Google's LVL - http://developer.android.com/google/play/licensing/adding-licensing.html#impl-lc
          * 
-	     * @param context a Context
-	     * @param appID AppKey.com assigned AppID for this app
-	     * @param analyticsEnabled if true, and if the calling app has INTERNET permission, the SDK will send up to 6 user interaction
-	     *        events along the installation funnel for the purpose of measuring & optimizing conversion. Events are tracked 
-	     *        via a Google Analytics compliant anonymous UDID. This data will only be shared with you, the developer of the app.
-	     *        NOTE - The SDK will check for INTERNET permission before sending, and will not bomb if it is not available
-	     *        If false, no tracking data will be sent to AppKey.
+         * @param context a Context
+         * @param appId AppKey.com assigned AppID of the calling application
+         * @param analyticsEnabled if true, and if the calling app has INTERNET permission, the SDK
+         *        will send user interaction events along the installation funnel for the purpose of
+         *        measuring & optimizing conversion. Events are tracked via Google Analytics using
+         *        an anonymous UDID.
+         *        
+         * a 4th argument overload is available for white-label integrations
+         * @param unlockerPackageName packageName of the white-labeled unlocker app
         */
         mAppKeyChecker = new AppKeyChecker(MainActivity.this, "7", true);  //TODO: Replace the 7 with your appId from AppKey.com
     }
